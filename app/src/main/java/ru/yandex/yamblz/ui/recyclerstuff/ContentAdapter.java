@@ -1,4 +1,4 @@
-package ru.yandex.yamblz.ui.fragments;
+package ru.yandex.yamblz.ui.recyclerstuff;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -8,19 +8,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import ru.yandex.yamblz.R;
 
-class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> {
+public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> {
 
     private final Random rnd = new Random();
-    private final List<Integer> colors = new ArrayList<>();
+    private final List<Integer> ids = new ArrayList<>();
+
+    public ContentAdapter() {
+        super();
+        setHasStableIds(true);
+    }
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ContentHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false));
+        return new ContentHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.content_item, parent, false));
     }
 
     @Override
@@ -34,10 +41,33 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
     }
 
     private Integer createColorForPosition(int position) {
-        if (position >= colors.size()) {
-            colors.add(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
-        }
-        return colors.get(position);
+        addIfNotExist(position);
+
+        return ids.get(position);
+    }
+
+    public void notifyAllMoved() {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        addIfNotExist(position);
+
+        return ids.get(position);
+    }
+
+    private void addIfNotExist(int position) {
+        while (position >= ids.size())
+            ids.add(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
+    }
+
+    public void moveElement(int prevPos, int nextPos) {
+        Collections.swap(ids, prevPos, nextPos);
+    }
+
+    public void deleteElement(int pos) {
+        ids.remove(pos);
     }
 
     static class ContentHolder extends RecyclerView.ViewHolder {
@@ -50,4 +80,5 @@ class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> 
             ((TextView) itemView).setText("#".concat(Integer.toHexString(color).substring(2)));
         }
     }
+
 }
