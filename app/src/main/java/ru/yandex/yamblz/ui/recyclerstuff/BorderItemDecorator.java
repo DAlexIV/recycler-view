@@ -1,11 +1,13 @@
 package ru.yandex.yamblz.ui.recyclerstuff;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import ru.yandex.yamblz.R;
 
 /**
  * Created by dalexiv on 8/6/16.
@@ -16,7 +18,7 @@ public class BorderItemDecorator extends RecyclerView.ItemDecoration {
         super.onDrawOver(c, parent, state);
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.RED);
+        paint.setColor(ContextCompat.getColor(parent.getContext(), R.color.colorPrimaryDark));
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
 

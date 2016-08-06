@@ -7,6 +7,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -26,14 +29,20 @@ public class ContentFragment extends BaseFragment {
     private static final int MAX_COLUMNS = 30;
     @BindView(R.id.rv)
     RecyclerView rv;
-
     @BindView(R.id.seekBar)
     SeekBar seekBar;
+
     private ContentAdapter adapter;
-
-
-    GridLayoutManager gridManager;
+    private GridLayoutManager gridManager;
     private RecyclerView.ItemDecoration decoration;
+    private boolean isDecorated = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        decoration = new BorderItemDecorator();
+    }
 
     @NonNull
     @Override
@@ -76,7 +85,6 @@ public class ContentFragment extends BaseFragment {
         itemTouchHelper.attachToRecyclerView(rv);
 
         initItemDecoration();
-        rv.addItemDecoration(decoration);
     }
 
     private void initItemDecoration() {
@@ -104,4 +112,23 @@ public class ContentFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_action_change_style:
+                if (isDecorated) {
+                    rv.removeItemDecoration(decoration);
+                    isDecorated = false;
+                } else {
+                    rv.addItemDecoration(decoration);
+                    isDecorated = true;
+                }
+        }
+        return true;
+    }
 }
