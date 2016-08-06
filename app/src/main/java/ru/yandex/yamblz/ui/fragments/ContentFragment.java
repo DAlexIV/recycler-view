@@ -16,14 +16,10 @@ import android.widget.SeekBar;
 
 import butterknife.BindView;
 import ru.yandex.yamblz.R;
-import ru.yandex.yamblz.ui.recyclerstuff.OptimizedGridLayoutManager;
 import ru.yandex.yamblz.ui.recyclerstuff.BorderItemDecorator;
 import ru.yandex.yamblz.ui.recyclerstuff.ContentAdapter;
-
-import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
-import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
-import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
-import static android.support.v7.widget.helper.ItemTouchHelper.UP;
+import ru.yandex.yamblz.ui.recyclerstuff.MoveAndSwipeTouchHelperCallback;
+import ru.yandex.yamblz.ui.recyclerstuff.OptimizedGridLayoutManager;
 
 public class ContentFragment extends BaseFragment {
     private static final int MAX_COLUMNS = 30;
@@ -65,24 +61,9 @@ public class ContentFragment extends BaseFragment {
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(LEFT | RIGHT | UP | DOWN, RIGHT) {
-
-                    @Override
-                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                        adapter.moveElement(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                        adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                        adapter.deleteElement(viewHolder.getAdapterPosition());
-                        adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-                    }
-                });
-
-        itemTouchHelper.attachToRecyclerView(rv);
+        new ItemTouchHelper(new MoveAndSwipeTouchHelperCallback(adapter,
+                color -> rv.setBackgroundColor(color)))
+                .attachToRecyclerView(rv);
 
         initItemDecoration();
     }

@@ -21,7 +21,6 @@ public class BorderItemDecorator extends RecyclerView.ItemDecoration {
         paint.setColor(ContextCompat.getColor(parent.getContext(), R.color.colorPrimaryDark));
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
-
         for (int i = 0; i < parent.getChildCount(); ++i) {
             View view = parent.getChildAt(i);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
@@ -41,9 +40,4 @@ public class BorderItemDecorator extends RecyclerView.ItemDecoration {
                     viewBounds.right, viewBounds.bottom, paint);
         }
     }
-
-//    @Override
-//    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//        super.getItemOffsets(new Rect(0, 0, 0, 0), view, parent, state);
-//    }
 }

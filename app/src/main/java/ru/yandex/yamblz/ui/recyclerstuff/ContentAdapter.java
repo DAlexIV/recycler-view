@@ -26,8 +26,9 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ContentHolder(LayoutInflater.from(parent.getContext())
+        final ContentHolder contentHolder = new ContentHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.content_item, parent, false));
+        return contentHolder;
     }
 
     @Override
