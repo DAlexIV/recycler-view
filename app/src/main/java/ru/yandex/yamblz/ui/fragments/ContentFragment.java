@@ -64,6 +64,7 @@ public class ContentFragment extends BaseFragment {
         rv.setAdapter(adapter);
         rv.setItemAnimator(new BackgroundColorItemAnimator());
         rv.setHasFixedSize(true);
+        rv.getRecycledViewPool().setMaxRecycledViews(adapter.getItemViewType(0), 40);
 
         bordersDecorator = new BorderItemDecorator();
         markingDecorator = new MarkingItemDecorator(adapter);

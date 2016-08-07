@@ -36,21 +36,24 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
         final ContentHolder contentHolder = new ContentHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.content_item, parent, false));
 
-        contentHolder.itemView.setOnClickListener(v -> {
-            int newColor = getRandomColor();
-            int position = contentHolder.getAdapterPosition();
+        contentHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int newColor = ContentAdapter.this.getRandomColor();
+                int position = contentHolder.getAdapterPosition();
 
-            if (position == NO_POSITION)
-                return;
+                if (position == NO_POSITION)
+                    return;
 
-            ValueAnimator valueAnimator
-                    = ValueAnimator.ofObject(new ArgbEvaluator(), colors.get(position), newColor);
-            valueAnimator.addUpdateListener(animation ->
-                    contentHolder.itemView.setBackgroundColor((Integer) animation.getAnimatedValue()));
-            valueAnimator.setDuration(CHANGE_COLOR_DURATION);
-            valueAnimator.start();
+                ValueAnimator valueAnimator
+                        = ValueAnimator.ofObject(new ArgbEvaluator(), colors.get(position), newColor);
+                valueAnimator.addUpdateListener(animation ->
+                        contentHolder.itemView.setBackgroundColor((Integer) animation.getAnimatedValue()));
+                valueAnimator.setDuration(CHANGE_COLOR_DURATION);
+                valueAnimator.start();
 
-            colors.set(position, newColor);
+                colors.set(position, newColor);
+            }
         });
         return contentHolder;
     }
@@ -108,7 +111,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
         return colors.get(itemPosition);
     }
 
-    class ContentHolder extends RecyclerView.ViewHolder {
+    public static class ContentHolder extends RecyclerView.ViewHolder {
         ContentHolder(View itemView) {
             super(itemView);
         }
