@@ -16,7 +16,6 @@ import android.widget.SeekBar;
 
 import butterknife.BindView;
 import ru.yandex.yamblz.R;
-import ru.yandex.yamblz.ui.recyclerstuff.BackgroundColorItemAnimator;
 import ru.yandex.yamblz.ui.recyclerstuff.BorderItemDecorator;
 import ru.yandex.yamblz.ui.recyclerstuff.ContentAdapter;
 import ru.yandex.yamblz.ui.recyclerstuff.MarkingItemDecorator;
@@ -62,7 +61,6 @@ public class ContentFragment extends BaseFragment {
         adapter = new ContentAdapter();
         rv.setLayoutManager(gridManager);
         rv.setAdapter(adapter);
-        rv.setItemAnimator(new BackgroundColorItemAnimator());
         rv.setHasFixedSize(true);
         rv.getRecycledViewPool().setMaxRecycledViews(adapter.getItemViewType(0), 40);
 

@@ -53,6 +53,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
                 valueAnimator.start();
 
                 colors.set(position, newColor);
+                notifyItemChanged(position);
             }
         });
         return contentHolder;
