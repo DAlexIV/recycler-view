@@ -16,16 +16,14 @@ import java.util.Random;
 
 import ru.yandex.yamblz.R;
 
-public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder> {
+import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
-    public static final int CHANGE_COLOR_DURATION = 200;
+public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder>
+    implements IGetItemColor {
+
+    private static final int CHANGE_COLOR_DURATION = 200;
     private final Random rnd = new Random();
     private final List<Integer> colors = new ArrayList<>();
-
-    public ContentAdapter() {
-        super();
-        setHasStableIds(true);
-    }
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,7 +34,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
             int newColor = getRandomColor();
             int position = contentHolder.getAdapterPosition();
 
-            if (position == RecyclerView.NO_POSITION)
+            if (position == NO_POSITION)
                 return;
 
             ValueAnimator valueAnimator
@@ -64,20 +62,11 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
     private Integer getColorForPosition(int position) {
         addIfNotExist(position);
-
-
         return colors.get(position);
     }
 
     public void notifyAllMoved() {
         notifyDataSetChanged();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        addIfNotExist(position);
-
-        return colors.get(position);
     }
 
     private int getRandomColor() {
@@ -91,22 +80,30 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
     public void moveElement(int prevPos, int nextPos) {
         Collections.swap(colors, prevPos, nextPos);
+        notifyItemMoved(prevPos, nextPos);
     }
+
 
     public void deleteElement(int pos) {
         colors.remove(pos);
     }
 
-    static class ContentHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getDefaultColorForItem(int itemPosition) {
+        if (itemPosition < 0 || itemPosition >= colors.size())
+            return 0;
+
+        return colors.get(itemPosition);
+    }
+
+    class ContentHolder extends RecyclerView.ViewHolder {
         ContentHolder(View itemView) {
             super(itemView);
         }
 
-        void bind(Integer color) {
+        void bind(int color) {
             itemView.setBackgroundColor(color);
             ((TextView) itemView).setText("#".concat(Integer.toHexString(color).substring(2)));
         }
-
     }
-
 }

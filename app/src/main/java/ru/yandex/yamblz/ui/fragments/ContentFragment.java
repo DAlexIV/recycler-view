@@ -18,6 +18,7 @@ import butterknife.BindView;
 import ru.yandex.yamblz.R;
 import ru.yandex.yamblz.ui.recyclerstuff.BorderItemDecorator;
 import ru.yandex.yamblz.ui.recyclerstuff.ContentAdapter;
+import ru.yandex.yamblz.ui.recyclerstuff.MarkingItemDecorator;
 import ru.yandex.yamblz.ui.recyclerstuff.MoveAndSwipeTouchHelperCallback;
 import ru.yandex.yamblz.ui.recyclerstuff.OptimizedGridLayoutManager;
 
@@ -30,14 +31,15 @@ public class ContentFragment extends BaseFragment {
 
     private ContentAdapter adapter;
     private GridLayoutManager gridManager;
-    private RecyclerView.ItemDecoration decoration;
+    private RecyclerView.ItemDecoration bordersDecorator;
+    private MarkingItemDecorator markingDecorator;
     private boolean isDecorated = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        decoration = new BorderItemDecorator();
+        bordersDecorator = new BorderItemDecorator();
     }
 
     @NonNull
@@ -61,15 +63,15 @@ public class ContentFragment extends BaseFragment {
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
 
+        bordersDecorator = new BorderItemDecorator();
+        markingDecorator = new MarkingItemDecorator(adapter);
+        rv.addItemDecoration(markingDecorator);
+
         new ItemTouchHelper(new MoveAndSwipeTouchHelperCallback(adapter,
-                color -> rv.setBackgroundColor(color)))
+                color -> rv.setBackgroundColor(color),
+                (initialPos, positionAfterMove) -> markingDecorator.setHighlightedPositions(initialPos, positionAfterMove)))
                 .attachToRecyclerView(rv);
 
-        initItemDecoration();
-    }
-
-    private void initItemDecoration() {
-        decoration = new BorderItemDecorator();
     }
 
     private void initSeekBar() {
@@ -103,10 +105,10 @@ public class ContentFragment extends BaseFragment {
         switch (item.getItemId()) {
             case R.id.menu_action_change_style:
                 if (isDecorated) {
-                    rv.removeItemDecoration(decoration);
+                    rv.removeItemDecoration(bordersDecorator);
                     isDecorated = false;
                 } else {
-                    rv.addItemDecoration(decoration);
+                    rv.addItemDecoration(bordersDecorator);
                     isDecorated = true;
                 }
         }

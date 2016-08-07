@@ -7,4 +7,5 @@ import android.support.v7.widget.DefaultItemAnimator;
  */
 
 public class BeautifulItemAnimator extends DefaultItemAnimator {
+    // TODO move chang animation here
 }

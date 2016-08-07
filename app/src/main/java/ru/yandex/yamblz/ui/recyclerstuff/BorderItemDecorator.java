@@ -23,6 +23,7 @@ public class BorderItemDecorator extends RecyclerView.ItemDecoration {
 
         for (int i = 0; i < parent.getChildCount(); ++i) {
             View view = parent.getChildAt(i);
+            parent.getAdapter();
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
             Rect viewBounds = new Rect(view.getLeft() + params.leftMargin,
                     view.getTop() + params.topMargin,

@@ -2,4 +2,6 @@
     <string name="app_name">Yamblz</string>
     <string name="content">Hello</string>
     <string name="decorate">Change decoration</string>
+    <string name="recycler_label_2">Dragged 2</string>
+    <string name="recycler_label_1">Dragged 1</string>
 </resources>
