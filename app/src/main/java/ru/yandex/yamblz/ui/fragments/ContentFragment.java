@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 
 import butterknife.BindView;
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.ui.recyclerstuff.BackgroundColorItemAnimator;
 import ru.yandex.yamblz.ui.recyclerstuff.BorderItemDecorator;
 import ru.yandex.yamblz.ui.recyclerstuff.ContentAdapter;
 import ru.yandex.yamblz.ui.recyclerstuff.MarkingItemDecorator;
@@ -53,14 +54,15 @@ public class ContentFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         gridManager = new OptimizedGridLayoutManager(getContext(), 1);
-        initRecyclerView();
+        initRecyclerViewAndItsInternals();
         initSeekBar();
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerViewAndItsInternals() {
         adapter = new ContentAdapter();
         rv.setLayoutManager(gridManager);
         rv.setAdapter(adapter);
+        rv.setItemAnimator(new BackgroundColorItemAnimator());
         rv.setHasFixedSize(true);
 
         bordersDecorator = new BorderItemDecorator();
@@ -69,7 +71,8 @@ public class ContentFragment extends BaseFragment {
 
         new ItemTouchHelper(new MoveAndSwipeTouchHelperCallback(adapter,
                 color -> rv.setBackgroundColor(color),
-                (initialPos, positionAfterMove) -> markingDecorator.setHighlightedPositions(initialPos, positionAfterMove)))
+                (initialPos, positionAfterMove) ->
+                        markingDecorator.updateHighlightedPositions(initialPos, positionAfterMove)))
                 .attachToRecyclerView(rv);
 
     }

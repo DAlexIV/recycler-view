@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import ru.yandex.yamblz.ui.recyclerstuff.interfaces.IColorChanger;
+import ru.yandex.yamblz.ui.recyclerstuff.interfaces.IMoveCallback;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
@@ -13,9 +16,6 @@ import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIP
  */
 
 public class MoveAndSwipeTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
-    public static final String WAS_DRAGGED_TAG = "WAS_DRAGGED_TAG";
-    public static final String WAS_PREV_DRAGGED_TAG = "WAS_PREV_DRAGGED_TAG";
-
     private ContentAdapter adapter;
     private IColorChanger iColorChanger;
     private IMoveCallback iMoveCallback;
@@ -42,7 +42,6 @@ public class MoveAndSwipeTouchHelperCallback extends ItemTouchHelper.SimpleCallb
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         adapter.deleteElement(viewHolder.getAdapterPosition());
-        adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
         iColorChanger.changeColor(Color.WHITE);
     }
 
@@ -61,7 +60,8 @@ public class MoveAndSwipeTouchHelperCallback extends ItemTouchHelper.SimpleCallb
             }
             else
                 if (actionState == ACTION_STATE_DRAG) {
-                    MarkingItemDecorator.highlightView(viewHolder.itemView, WAS_DRAGGED_TAG);
+                    MarkingItemDecorator.highlightView(viewHolder.itemView,
+                            HighlightingStates.WAS_DRAGGED);
                 }
         }
     }

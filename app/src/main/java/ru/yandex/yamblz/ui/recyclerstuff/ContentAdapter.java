@@ -15,15 +15,21 @@ import java.util.List;
 import java.util.Random;
 
 import ru.yandex.yamblz.R;
+import ru.yandex.yamblz.ui.recyclerstuff.interfaces.IGetItemColor;
 
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentHolder>
-    implements IGetItemColor {
-
-    private static final int CHANGE_COLOR_DURATION = 200;
+        implements IGetItemColor {
     private final Random rnd = new Random();
     private final List<Integer> colors = new ArrayList<>();
+
+    private static final int CHANGE_COLOR_DURATION = 100;
+
+    public ContentAdapter() {
+        super();
+        setHasStableIds(true);
+    }
 
     @Override
     public ContentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,7 +51,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
             valueAnimator.start();
 
             colors.set(position, newColor);
-            notifyItemChanged(position);
         });
         return contentHolder;
     }
@@ -58,6 +63,12 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
     @Override
     public int getItemCount() {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        addIfNotExist(position);
+        return colors.get(position);
     }
 
     private Integer getColorForPosition(int position) {
@@ -86,6 +97,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentH
 
     public void deleteElement(int pos) {
         colors.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     @Override

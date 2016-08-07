@@ -13,6 +13,8 @@ import ru.yandex.yamblz.R;
  * Created by dalexiv on 8/6/16.
  */
 public class BorderItemDecorator extends RecyclerView.ItemDecoration {
+    private static final double BORDER_RATIO = 0.05;
+
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
@@ -30,7 +32,7 @@ public class BorderItemDecorator extends RecyclerView.ItemDecoration {
                     view.getRight() + params.rightMargin,
                     view.getBottom() + params.bottomMargin);
 
-            int BOUND_WIDTH = view.getWidth() / 20;
+            int BOUND_WIDTH = (int) (view.getWidth() * BORDER_RATIO);
             c.drawRect(viewBounds.left, viewBounds.top, viewBounds.right,
                     viewBounds.top + BOUND_WIDTH, paint);
             c.drawRect(viewBounds.left, viewBounds.top, viewBounds.left + BOUND_WIDTH,
